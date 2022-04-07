@@ -78,7 +78,11 @@ function action_check_read()
 	local rv ={}
 	local file
 	local line
+	local smsloc
+	local currmodem
 	smsnum = luci.model.uci.cursor():get("modem", "general", "smsnum")
+	smsloc = luci.model.uci.cursor():get("modem", "modeminfo" .. smsnum, "smsloc")
+
 	conn = "Modem #" .. smsnum
 	rv["conntype"] = conn
 	support = luci.model.uci.cursor():get("modem", "modem" .. smsnum, "sms")
@@ -86,6 +90,13 @@ function action_check_read()
 	rv["menable"] = "0"
 	rv["mslots"] = "0"
 	if support == "1" then
+		if smsloc == "SM" then
+			rv["smsloc"] = "SIM"
+		elseif smsloc == "ME"  then
+			rv["smsloc"] = "Modem"
+		else
+			rv["smsloc"] = "Error"
+		end
 		rv["ready"] = "1"
 		result = "/tmp/smsresult" .. smsnum .. ".at"
 		file = io.open(result, "r")

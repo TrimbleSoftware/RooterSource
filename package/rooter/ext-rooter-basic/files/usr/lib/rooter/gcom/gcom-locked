@@ -11,6 +11,7 @@ PORT=$1
 GCOM=$2
 CURRMODEM=$3
 ATC=$4
+SMSLOC=$5
 
 LOCKDIR="/tmp/lockgcom$CURRMODEM"
 PIDFILE="${LOCKDIR}/PID"
@@ -20,6 +21,9 @@ while [ 1 -lt 6 ]; do
 		echo "$$" > "${PIDFILE}"
 		if [ ! -z "$ATC" ]; then
 			export ATCMD="$ATC"
+		fi
+		if [ ! -z "$SMSLOC" ]; then
+			export SMSLOC="$SMSLOC"
 		fi
 		OX=$(gcom -d $PORT -s $ROOTER_GCOM$GCOM 2>/dev/null)
 		if [ ! -e /tmp/block ]; then

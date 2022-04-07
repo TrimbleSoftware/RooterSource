@@ -142,6 +142,18 @@ if [[ -z $(echo "$CONN" | grep -o "disconnected") ]]; then
 	CONN4=$(uqmi -s -d "$device" --set-client-id wds,"$cid" --get-current-settings)
 	log "GET-CURRENT-SETTINGS is $CONN4"
 
+	# get auto MTU for QMI modems
+	if [ $(uci -q get modem.modeminfo$CURRMODEM.automtu) -eq "1" ]; then
+		AUTOMTU=$(echo $CONN4 | awk '{sub(/.*\"mtu\":/,"");sub(/,.*/,"");print}')
+		if [ ! -z "${AUTOMTU##*[!0-9]*}" ]; then
+			uci set modem.modeminfo$CURRMODEM.mtu="$AUTOMTU"
+			uci commit modem
+			log "Auto MTU saved for modem $CURRMODEM: $AUTOMTU"
+		else
+			log "Error getting Auto MTU for modem $CURRMODEM"
+		fi
+	fi
+
 	if [ $enb = "1" ]; then
 		cid6=`uqmi -s -d "$device" --get-client-id wds`
 		[ $? -ne 0 ] && {

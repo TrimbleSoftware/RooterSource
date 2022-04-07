@@ -17,7 +17,7 @@ process_csq() {
 	CSQ=$(echo "$O" | awk -F[,\ ] '/^\+CSQ:/ {print $2}')
 	[ "x$CSQ" = "x" ] && CSQ=-1
 	if [ $CSQ -ge 0 -a $CSQ -le 31 ]; then
-		CSQ_PER=$(($CSQ * 100/31))
+		CSQ_PER=$(awk -v CSQ1="$CSQ" 'BEGIN {printf "%.2f",(CSQ1*100/31); exit}')
 		CSQ_RSSI=$((2 * CSQ - 113))
 		CSQX=$CSQ_RSSI
 		[ $CSQ -eq 0 ] && CSQ_RSSI="<= "$CSQ_RSSI

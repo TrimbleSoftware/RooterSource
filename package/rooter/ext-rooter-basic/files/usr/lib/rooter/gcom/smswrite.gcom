@@ -6,6 +6,7 @@ opengt
 
 :start
 
+let $l=$env("SMSLOC")
 let $x=$env("ATCMD")
 let $j=$left($x,1)
 if $j = "0" let $j=$mid($x,1,2)
@@ -16,8 +17,9 @@ let k=len($x)-9
 let $p=$right($x,k)
 send "AT+CMGF=0^m"
 waitfor 2 "OK"
-send 'AT+CPMS="SM"'
-send ',"'
+send "AT+CPMS="
+send $l
+send '","'
 send $d
 send '"^m'
 waitfor 2 "OK"

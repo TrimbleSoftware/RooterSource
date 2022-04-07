@@ -294,6 +294,18 @@ _proto_mbim_setup() {
 		return 1
 	}
 
+	# get auto MTU for MBIM modems
+	if [ $(uci -q get modem.modeminfo$CURRMODEM.automtu) -eq "1" ]; then
+		AUTOMTU=$(echo $CONFIG | awk '{sub(/.* ipv4mtu: /,"");sub(/ .*/,"");print}')
+		if [ ! -z "${AUTOMTU##*[!0-9]*}" ]; then
+			uci set modem.modeminfo$CURRMODEM.mtu="$AUTOMTU"
+			uci commit modem
+			log "Auto MTU saved for MBIM modem $CURRMODEM: $AUTOMTU"
+		else
+			log "Error getting Auto MTU for MBIM modem $CURRMODEM"
+		fi
+	fi
+
 	IP=$(echo -e "$CONFIG"|grep "ipv4address"|grep -E -o "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)")
 	GATE=$(echo -e "$CONFIG"|grep "ipv4gateway"|grep -E -o "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)")
 	DNS1=$(echo -e "$CONFIG"|grep "ipv4dnsserver"|grep -E -o "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)" |sed -n 1p)

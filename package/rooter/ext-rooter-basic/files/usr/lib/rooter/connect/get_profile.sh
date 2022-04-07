@@ -146,7 +146,7 @@ do_custom() {
 				fi
 				if [ $MATCH = 1 ]; then
 					local apn user passw pincode auth ppp delay lock mcc mnc
-					local dns1 dns2 dns3 dns4 log lb at atc
+					local dns1 dns2 dns3 dns4 log lb at atc mtu automtu smsloc
 					config_get apn $1 apn
 					dapn=$(echo "$apn" | grep "|")
 					if [ -z $dapn ]; then
@@ -161,6 +161,10 @@ do_custom() {
 					uci set modem.modeminfo$CURRMODEM.apn2=$apn2
 					config_get mtu $1 mtu
 					uci set modem.modeminfo$CURRMODEM.mtu=$mtu
+					config_get automtu $1 automtu
+					uci set modem.modeminfo$CURRMODEM.automtu=$automtu
+					config_get smsloc $1 smsloc
+					uci set modem.modeminfo$CURRMODEM.smsloc=$smsloc
 					config_get user $1 user
 					uci set modem.modeminfo$CURRMODEM.user=$user
 					config_get passw $1 passw
@@ -303,7 +307,9 @@ if [ $MATCH = 0 ]; then
 	uci set modem.modeminfo$CURRMODEM.at=$(uci -q get profile.default.at)
 	uci set modem.modeminfo$CURRMODEM.atc=$(uci -q get profile.default.atc)
 	uci set modem.modeminfo$CURRMODEM.tzone=$(uci -q get profile.default.tzone)
-	uci set modem.modeminfo$CURRMODEM.mtu=$(uci -q get profile.default.mtu)	
+	uci set modem.modeminfo$CURRMODEM.mtu=$(uci -q get profile.default.mtu)
+	uci set modem.modeminfo$CURRMODEM.automtu=$(uci -q get profile.default.automtu)
+	uci set modem.modeminfo$CURRMODEM.smsloc=$(uci -q get profile.default.smsloc)
 	uci set modem.modeminfo$CURRMODEM.nodhcp=$(uci -q get profile.default.nodhcp)
 	pdp=$(uci -q get profile.default.pdptype)
 	if [ $pdp = "0" ]; then

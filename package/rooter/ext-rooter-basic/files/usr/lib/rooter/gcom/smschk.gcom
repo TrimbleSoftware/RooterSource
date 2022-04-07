@@ -5,6 +5,7 @@ opengt
  waitquiet 1 0.2
 
 :start
+let $l=$env("SMSLOC")
 let $g=$env("TIMEOUT")
 if $g = "" let f=25
 else let f = val($g)
@@ -14,7 +15,14 @@ let t=time()+f
 gosub getresult
 if $s="^mTIMEOUT ERROR" print $s
 
-send 'AT+CPMS="SM","SM","SM"^m'
+send "AT+CPMS="
+send ',"'
+send $l
+send '","'
+send $l
+send '","'
+send $l
+send '"^m'
 waitfor 5 "OK"
 
 send 'AT+CGSMS=2^m'

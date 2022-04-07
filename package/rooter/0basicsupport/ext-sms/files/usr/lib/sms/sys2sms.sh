@@ -33,13 +33,13 @@ fi
 LOCKDIR="/tmp/smslock$CURRMODEM"
 PIDFILE="${LOCKDIR}/PID"
 
-SMSLOC=$(uci -q get modem.modem$CURRMODEM.smsloc)
+SMSLOC=$(uci -q get modem.modeminfo$CURRMODEM.smsloc)
 ATCMDD="$PDUL,$SMSLOC,0,$PDU"
 
 while [ $XSTATUS -eq 0 ]; do
 	if mkdir "${LOCKDIR}" &>/dev/null; then
 		echo "$$" > "${PIDFILE}"
-		OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "smswrite.gcom" "$CURRMODEM" "$ATCMDD")
+		OX=$($ROOTER/gcom/gcom-locked "$COMMPORT" "smswrite.gcom" "$CURRMODEM" "$ATCMDD" "$SMSLOC"))
 		RES=$(echo "$OX" | grep "+CMGW:")
 		if [ ${#RES} -eq 0 ]; then
 			RES="Failed to write SMS - is SMS storage full?"

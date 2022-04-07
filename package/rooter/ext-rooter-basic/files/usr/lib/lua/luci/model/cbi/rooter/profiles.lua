@@ -85,6 +85,11 @@ mnc.rmempty = true;
 mnc.datatype = "and(uinteger,min(1),max(999))"
 mnc:depends("lock", "1")
 
+sl1 = di:taboption(this_tab, ListValue, "smsloc", translate("SMS Message Storage Location :"));
+sl1:value("SM", "SIM")
+sl1:value("ME", "Modem")
+sl1.default="SIM"
+
 this_taba = "advance"
 
 mf = di:taboption(this_taba, ListValue, "ppp", translate("Force Modem to PPP Protocol :"));
@@ -136,12 +141,19 @@ if nixio.fs.access("/etc/config/mwan3") then
 	mlb.default=0
 end
 
+mamtu = di:taboption(this_taba, ListValue, "automtu", translate("Auto MTU for QMI/MBIM Modems :"),
+		translate("Gets ISP Connection Assigned MTU Value"));
+mamtu:value("0", "No")
+mamtu:value("1", "Yes")
+mamtu.default=0
+
 mtu = di:taboption(this_taba, Value, "mtu", translate("Custom MTU :"),
-		translate("Acceptable values: 1420-1500. Size for Custom MTU. This may have to be adjusted for certain ISPs"));
+		translate("Acceptable values: 68-1500. Size for Custom MTU. This may have to be adjusted for certain ISPs"));
 mtu.optional=true
-mtu.rmempty = true
-mtu.default = "1500"
-mtu.datatype = "range(1420, 1500)"
+mtu.rmempty=true
+mtu.default="1500"
+mtu.datatype="and(uinteger,range(68,1500))"
+mtu:depends("automtu","0")
 
 mat = di:taboption(this_taba, ListValue, "at", translate("Enable Custom AT Startup Command at Connection :"));
 mat:value("0", "No")
@@ -450,6 +462,11 @@ cmnc.rmempty = true;
 cmnc.datatype = "and(uinteger,min(1),max(999))"
 cmnc:depends("lock", "1")
 
+sl2 = s:taboption(this_ctab, ListValue, "smsloc", translate("SMS Message Storage Location :"));
+sl2:value("SM", "SIM")
+sl2:value("ME", "Modem")
+sl2.default="SIM"
+
 this_ctaba = "cadvanced"
 
 cmf = s:taboption(this_ctaba, ListValue, "ppp", "Force Modem to PPP Protocol :");
@@ -507,12 +524,19 @@ if nixio.fs.access("/etc/config/mwan3") then
 	cmlb.default=0
 end
 
+mamtu = s:taboption(this_ctaba, ListValue, "automtu", translate("Auto MTU for QMI/MBIM Modems :"),
+		translate("Gets ISP Connection Assigned MTU Value"));
+mamtu:value("0", "No")
+mamtu:value("1", "Yes")
+mamtu.default=0
+
 mtu = s:taboption(this_ctaba, Value, "mtu", translate("Custom MTU :"),
-		translate("Acceptable values: 1420-1500. Size for Custom MTU. This may have to be adjusted for certain ISPs"));
+		translate("Acceptable values: 68-1500. Size for Custom MTU. This may have to be adjusted for certain ISPs"));
 mtu.optional=true
-mtu.rmempty = true
-mtu.default = "1500"
-mtu.datatype = "range(1420, 1500)"
+mtu.rmempty=true
+mtu.default="1500"
+mtu.datatype="and(uinteger, range(68,1500))"
+mtu:depends("automtu","0")
 
 cmat = s:taboption(this_ctaba, ListValue, "at", "Enable Custom AT Startup Command at Connection :");
 cmat:value("0", "No")

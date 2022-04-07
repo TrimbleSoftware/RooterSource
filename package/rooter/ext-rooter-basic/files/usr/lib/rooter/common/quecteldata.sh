@@ -58,7 +58,7 @@ if [ "$CSQ" = "99" ]; then
 	CSQ=""
 fi
 if [ -n "$CSQ" ]; then
-	CSQ_PER=$(($CSQ * 100/31))"%"
+	CSQ_PER=$(awk -v CSQ1="$CSQ" 'BEGIN {printf "%.2f",(CSQ1*100/31); exit}')"%"
 	CSQ_RSSI=$((2 * CSQ - 113))" dBm"
 else
 	CSQ="-"

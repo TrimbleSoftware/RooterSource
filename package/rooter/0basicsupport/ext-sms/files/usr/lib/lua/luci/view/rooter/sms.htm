@@ -45,7 +45,9 @@
 			}
 			if ( ss == "2" )
 			{
-				document.getElementById('supported').innerHTML="Messages Present";
+				document.getElementById("smsloc1").innerHTML=rv.smsloc;
+				document.getElementById("smsloc2").innerHTML=rv.smsloc;
+				document.getElementById('supported').innerHTML="Messages Present on " + rv.smsloc;
 				clearListBox("smsList");
 				document.getElementById('total').innerHTML=rv.max;
 				document.getElementById('used').innerHTML=rv.used;
@@ -75,7 +77,7 @@
 				}
 				if (rv.used == "0")
 				{
-					document.getElementById('supported').innerHTML="No Messages Present on SIM";
+					document.getElementById('supported').innerHTML="No Messages Present on " + rv.smsloc;
 				}
 				else
 				{
@@ -413,8 +415,8 @@
 
 	<table width="550"  border="0">
   	<tr>
-    		<td width="18%"><div align="center"><strong><u>Total SIM Message Slots</u></strong></div></td>
-    		<td width="18%"><div align="center"><strong><u>Used SIM Message Slots</u></strong></div></td>
+    		<td width="18%"><div align="center"><strong><u>Total <span id="smsloc1"></span> Slots</u></strong></div></td>
+    		<td width="18%"><div align="center"><strong><u>Used <span id="smsloc2"></span> Slots</u></strong></div></td>
 		<td width="34%">&nbsp;</td>
   	</tr>
   	<tr>
